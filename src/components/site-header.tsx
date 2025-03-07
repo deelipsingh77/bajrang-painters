@@ -75,7 +75,7 @@ export function SiteHeader() {
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
             <BrushIcon className="h-6 w-6" />
-            <span className="font-bold text-lg">Painting Services</span>
+            <span className="font-bold text-lg">Bajrang Painters</span>
           </Link>
         </div>
 

@@ -10,8 +10,8 @@ import {
   ShieldIcon,
   PaintBucketIcon,
   StarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
+  // ChevronLeftIcon,
+  // ChevronRightIcon,
   PaintbrushIcon,
 } from "lucide-react"
 import Image from "next/image"
@@ -20,20 +20,20 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView,
 // Hero carousel images
 const carouselImages = [
   {
-    src: "https://images.unsplash.com/photo-1562259949-e8e7689d7828",
+    src: "https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Painting Services",
     title: "Crafting Beautiful Spaces with Precision and Passion",
     description:
       "We are a locally owned and managed painting contractor providing superior quality painting services for over 10 years.",
   },
   {
-    src: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f",
+    src: "https://images.unsplash.com/photo-1560184897-ae75f418493e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Interior Painting",
     title: "Transform Your Interior Spaces",
     description: "Our expert team brings new life to your home with premium paints and meticulous attention to detail.",
   },
   {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64",
+    src: "https://images.unsplash.com/photo-1567954970774-58d6aa6c50dc?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Exterior Painting",
     title: "Elevate Your Home's Curb Appeal",
     description: "Weather-resistant, long-lasting exterior painting solutions that protect and beautify your property.",
@@ -285,7 +285,7 @@ function FullWidthCarousel({ currentSlide, nextSlide, prevSlide }: FullWidthCaro
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation controls */}
+      {/* Navigation dots - keeping these for accessibility and user control */}
       <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center space-x-4">
         {carouselImages.map((_, index) => (
           <motion.button
@@ -312,36 +312,7 @@ function FullWidthCarousel({ currentSlide, nextSlide, prevSlide }: FullWidthCaro
         ))}
       </div>
 
-      {/* Arrow navigation */}
-      <motion.button
-        onClick={prevSlide}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm p-3 rounded-full text-white border border-white/20"
-        whileHover={{
-          scale: 1.2,
-          backgroundColor: "rgba(255, 255, 255, 0.3)",
-        }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ x: -50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        <ChevronLeftIcon size={24} />
-      </motion.button>
-
-      <motion.button
-        onClick={nextSlide}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm p-3 rounded-full text-white border border-white/20"
-        whileHover={{
-          scale: 1.2,
-          backgroundColor: "rgba(255, 255, 255, 0.3)",
-        }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ x: 50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        <ChevronRightIcon size={24} />
-      </motion.button>
+      {/* Arrow navigation buttons have been removed */}
     </div>
   )
 }
