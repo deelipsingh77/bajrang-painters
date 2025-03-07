@@ -15,7 +15,7 @@ import {
   PaintbrushIcon,
 } from "lucide-react"
 import Image from "next/image"
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView, useAnimate, AnimationSequence } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView, useAnimate } from "framer-motion"
 
 // Hero carousel images
 const carouselImages = [
@@ -113,23 +113,18 @@ export default function Home() {
       {/* Floating paint drops */}
       <PaintDrops />
 
-      {/* Hero Section with 3D Carousel */}
+      {/* Hero Section with Full-Width Carousel */}
       <motion.section
         ref={heroRef}
-        className="relative min-h-screen py-20 overflow-hidden"
+        className="relative min-h-screen overflow-hidden"
         style={{
           y: heroY,
           opacity: heroOpacity,
           scale: heroScale,
         }}
       >
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <HeroContent currentSlide={currentSlide} />
-
-            <HeroCarousel currentSlide={currentSlide} nextSlide={nextSlide} prevSlide={prevSlide} />
-          </div>
-        </div>
+        {/* Full-width carousel */}
+        <FullWidthCarousel currentSlide={currentSlide} nextSlide={nextSlide} prevSlide={prevSlide} />
 
         {/* Animated background elements */}
         <AnimatedBackgroundShapes />
@@ -176,67 +171,126 @@ export default function Home() {
   )
 }
 
-// Hero Content Component with Text Animation
-function HeroContent({ currentSlide }: { currentSlide: number }) {
+// Full-Width Carousel Component
+interface FullWidthCarouselProps {
+  currentSlide: number;
+  nextSlide: () => void;
+  prevSlide: () => void;
+}
+
+function FullWidthCarousel({ currentSlide, nextSlide, prevSlide }: FullWidthCarouselProps) {
+  const [scope, animate] = useAnimate()
+  const constraintsRef = useRef(null)
+
+  // Animation for slide change
+  useEffect(() => {
+    animate(scope.current, { opacity: [0.5, 1] }, { duration: 0.5 })
+  }, [currentSlide, animate, scope])
+
   return (
-    <motion.div
-      className="space-y-6"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-    >
-      <AnimatePresence mode="wait">
+    <div className="relative w-full h-screen overflow-hidden" ref={constraintsRef}>
+      {/* Carousel content */}
+      <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={currentSlide}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -50 }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
+          ref={scope}
+          className="absolute inset-0 w-full h-full"
+          initial={{
+            opacity: 0,
+            scale: 1.1,
           }}
-          className="min-h-[200px]"
+          animate={{
+            opacity: 1,
+            scale: 1,
+            transition: {
+              duration: 0.8,
+              ease: [0.25, 0.1, 0.25, 1.0],
+            },
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.95,
+            transition: {
+              duration: 0.5,
+              ease: [0.25, 0.1, 0.25, 1.0],
+            },
+          }}
         >
-          <TextReveal text={carouselImages[currentSlide].title} />
-          <motion.p
-            className="text-lg text-gray-600 mt-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
+          {/* Background image with parallax effect */}
+          <motion.div
+            className="absolute inset-0 w-full h-full"
+            initial={{ scale: 1.2 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 6, ease: "easeOut" }}
           >
-            {carouselImages[currentSlide].description}
-          </motion.p>
+            <Image
+              src={carouselImages[currentSlide].src || "/placeholder.svg"}
+              alt={carouselImages[currentSlide].alt}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+          </motion.div>
+
+          {/* Content overlay */}
+          <div className="absolute inset-0 flex items-center z-10">
+            <div className="container mx-auto px-6 md:px-12">
+              <div className="max-w-xl">
+                <TextReveal text={carouselImages[currentSlide].title} />
+
+                <motion.p
+                  className="text-lg text-white/90 mt-6 drop-shadow-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                >
+                  {carouselImages[currentSlide].description}
+                </motion.p>
+
+                <motion.div
+                  className="mt-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                >
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 relative overflow-hidden group">
+                    <span className="relative z-10">Get Started</span>
+                    <motion.span
+                      className="absolute inset-0 bg-white"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "100%" }}
+                      transition={{ duration: 0.5 }}
+                      style={{ opacity: 0.3 }}
+                    />
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* Animated paint drip effect */}
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary/40 to-transparent"
+            initial={{ y: 128 }}
+            animate={{ y: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.5,
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+            }}
+          />
         </motion.div>
       </AnimatePresence>
 
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 10,
-          delay: 0.8,
-        }}
-      >
-        <Button size="lg" className="bg-primary hover:bg-primary/90 mt-4 relative overflow-hidden group">
-          <span className="relative z-10">Get Started</span>
-          <motion.span
-            className="absolute inset-0 bg-white"
-            initial={{ x: "-100%" }}
-            whileHover={{ x: "100%" }}
-            transition={{ duration: 0.5 }}
-            style={{ opacity: 0.3 }}
-          />
-        </Button>
-      </motion.div>
-
-      <div className="flex space-x-2 mt-6">
+      {/* Navigation controls */}
+      <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center space-x-4">
         {carouselImages.map((_, index) => (
           <motion.button
             key={index}
-            className={`w-3 h-3 rounded-full ${currentSlide === index ? "bg-primary" : "bg-gray-300"}`}
+            className={`w-3 h-3 rounded-full ${currentSlide === index ? "bg-white" : "bg-white/40"}`}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{
@@ -245,12 +299,50 @@ function HeroContent({ currentSlide }: { currentSlide: number }) {
               stiffness: 400,
               damping: 10,
             }}
+            onClick={() => {
+              if (index > currentSlide) {
+                nextSlide();
+              } else if (index < currentSlide) {
+                prevSlide();
+              }
+            }}
             whileHover={{ scale: 1.5 }}
             whileTap={{ scale: 0.9 }}
           />
         ))}
       </div>
-    </motion.div>
+
+      {/* Arrow navigation */}
+      <motion.button
+        onClick={prevSlide}
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm p-3 rounded-full text-white border border-white/20"
+        whileHover={{
+          scale: 1.2,
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
+        }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ x: -50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 1 }}
+      >
+        <ChevronLeftIcon size={24} />
+      </motion.button>
+
+      <motion.button
+        onClick={nextSlide}
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm p-3 rounded-full text-white border border-white/20"
+        whileHover={{
+          scale: 1.2,
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
+        }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ x: 50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 1 }}
+      >
+        <ChevronRightIcon size={24} />
+      </motion.button>
+    </div>
   )
 }
 
@@ -292,7 +384,7 @@ function TextReveal({ text }: { text: string }) {
 
   return (
     <motion.h1
-      className="text-4xl md:text-5xl font-bold tracking-tight flex flex-wrap"
+      className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight flex flex-wrap text-white drop-shadow-lg"
       variants={container}
       initial="hidden"
       animate="visible"
@@ -303,113 +395,6 @@ function TextReveal({ text }: { text: string }) {
         </motion.span>
       ))}
     </motion.h1>
-  )
-}
-
-// 3D Carousel Component
-function HeroCarousel({ currentSlide, nextSlide, prevSlide }: { currentSlide: number; nextSlide: () => void; prevSlide: () => void }) {
-  const [scope, animate] = useAnimate()
-
-  useEffect(() => {
-    const sequence = [
-      [scope.current, { scale: 0.95, rotateY: 5 }, { duration: 0.3 }],
-      [scope.current, { scale: 1, rotateY: 0 }, { duration: 0.3, delay: 0.1 }],
-    ]
-
-    animate(sequence as AnimationSequence)
-  }, [currentSlide, animate, scope])
-
-  return (
-    <motion.div
-      ref={scope}
-      className="relative h-[400px] rounded-lg overflow-hidden perspective-1000"
-      initial={{ opacity: 0, rotateY: 30, scale: 0.9 }}
-      animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-      transition={{
-        duration: 0.8,
-        delay: 0.4,
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-      }}
-      style={{
-        transformStyle: "preserve-3d",
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-      }}
-    >
-      <motion.div className="absolute inset-0 flex items-center justify-between z-20 px-4">
-        <motion.button
-          onClick={prevSlide}
-          className="bg-white/80 p-3 rounded-full text-primary"
-          whileHover={{
-            scale: 1.2,
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-          }}
-          whileTap={{ scale: 0.9 }}
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <ChevronLeftIcon size={24} />
-        </motion.button>
-        <motion.button
-          onClick={nextSlide}
-          className="bg-white/80 p-3 rounded-full text-primary"
-          whileHover={{
-            scale: 1.2,
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-          }}
-          whileTap={{ scale: 0.9 }}
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <ChevronRightIcon size={24} />
-        </motion.button>
-      </motion.div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentSlide}
-          initial={{ opacity: 0, rotateY: 45, scale: 0.8 }}
-          animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-          exit={{ opacity: 0, rotateY: -45, scale: 0.8 }}
-          transition={{ duration: 0.7 }}
-          className="absolute inset-0"
-          style={{ backfaceVisibility: "hidden" }}
-        >
-          <Image
-            src={carouselImages[currentSlide].src || "/placeholder.svg"}
-            alt={carouselImages[currentSlide].alt}
-            fill
-            className="object-cover rounded-lg"
-            priority
-          />
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent rounded-lg"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          />
-
-          {/* Animated paint drip effect */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-primary/30 to-transparent"
-            initial={{ y: 80 }}
-            animate={{ y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.5,
-              type: "spring",
-              stiffness: 100,
-              damping: 20,
-            }}
-          />
-        </motion.div>
-      </AnimatePresence>
-    </motion.div>
   )
 }
 
@@ -582,7 +567,7 @@ function StatItem({ number, label, delay, color }: { number: number; label: stri
 
   useEffect(() => {
     if (isInView) {
-      let startTime: number | undefined
+      let startTime: number | null = null;
       let animationFrame: number
       const duration = 2000 // 2 seconds
 
@@ -729,42 +714,42 @@ function FeaturesHeader() {
 function FeatureCards() {
   const features = [
     {
-      icon: <LeafIcon className="w-12 h-12 text-green-500 mb-4" />,
+      icon: <LeafIcon className="w-8 h-8 text-white" />,
       title: "Eco-Friendly",
       description: "We use environmentally conscious materials and techniques",
       color: "from-green-500 to-emerald-500",
       delay: 0,
     },
     {
-      icon: <DollarSignIcon className="w-12 h-12 text-blue-500 mb-4" />,
+      icon: <DollarSignIcon className="w-8 h-8 text-white" />,
       title: "Value for Money",
       description: "Competitive pricing without compromising on quality",
       color: "from-blue-500 to-cyan-500",
       delay: 0.1,
     },
     {
-      icon: <BrushIcon className="w-12 h-12 text-purple-500 mb-4" />,
+      icon: <BrushIcon className="w-8 h-8 text-white" />,
       title: "Expert Team",
       description: "Skilled professionals with years of experience",
       color: "from-purple-500 to-indigo-500",
       delay: 0.2,
     },
     {
-      icon: <ShieldIcon className="w-12 h-12 text-red-500 mb-4" />,
+      icon: <ShieldIcon className="w-8 h-8 text-white" />,
       title: "Satisfaction Guaranteed",
       description: "Your satisfaction is our top priority",
       color: "from-red-500 to-pink-500",
       delay: 0.3,
     },
     {
-      icon: <PaintBucketIcon className="w-12 h-12 text-yellow-500 mb-4" />,
+      icon: <PaintBucketIcon className="w-8 h-8 text-white" />,
       title: "Quality Materials",
       description: "We use only the highest quality paints and materials",
       color: "from-yellow-500 to-amber-500",
       delay: 0.4,
     },
     {
-      icon: <StarIcon className="w-12 h-12 text-orange-500 mb-4" />,
+      icon: <StarIcon className="w-8 h-8 text-white" />,
       title: "Experienced",
       description: "Over 10 years of industry experience",
       color: "from-orange-500 to-red-500",
@@ -803,19 +788,15 @@ function FeatureCards() {
 }
 
 // Individual Feature Card with 3D Effect
-function FeatureCard({ 
-  icon, 
-  title, 
-  description, 
-  color, 
-  delay 
-}: { 
-  icon: React.ReactNode; 
-  title: string; 
-  description: string; 
-  color: string; 
-  delay: number; 
-}) {
+interface FeatureCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  color: string;
+  delay: number;
+}
+
+function FeatureCard({ icon, title, description, color, delay }: FeatureCardProps) {
   const [rotateX, setRotateX] = useState(0)
   const [rotateY, setRotateY] = useState(0)
 
@@ -877,7 +858,7 @@ function FeatureCard({
             initial={{ scale: 1 }}
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            className={`bg-gradient-to-br ${color} p-3 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto`}
+            className={`bg-gradient-to-br ${color} p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto`}
           >
             {icon}
           </motion.div>
@@ -1021,7 +1002,7 @@ function PaintBrushCursor() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 pointer-events-none z-50 mix-blend-difference"
+      className="fixed top-0 left-0 pointer-events-none z-40"
       animate={{
         x: mousePosition.x - 16,
         y: mousePosition.y - 16,
@@ -1049,4 +1030,3 @@ function PaintBrushCursor() {
     </motion.div>
   )
 }
-

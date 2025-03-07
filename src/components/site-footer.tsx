@@ -1,9 +1,14 @@
+import { cn } from "@/lib/utils";
 import { BrushIcon, PhoneIcon, MailIcon, MapPinIcon } from "lucide-react";
 import Link from "next/link";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  className?: string;
+}
+
+export function SiteFooter({ className }: SiteFooterProps) {
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className={cn("bg-gray-900 text-gray-300", className)}>
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
