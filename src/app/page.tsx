@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import PaintSplashes from "@/components/paint-splashes";
 import PaintDrops from "@/components/paint-drops";
-import carouselImages from "@/constansts/carousel-images";
+import carouselImages from "@/constants/carousel-images";
 import FullWidthCarousel from "@/components/full-width-carousel";
 import AnimatedBackgroundShapes from "@/components/animated-background-shapes";
 import ParallaxBackground from "@/components/parallax-background";

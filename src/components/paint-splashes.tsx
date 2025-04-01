@@ -1,4 +1,4 @@
-import particleColors from "@/constansts/particle-colors";
+import particleColors from "@/constants/particle-colors";
 import { motion } from "framer-motion";
 
 function PaintSplashes() {
