@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import PaintSplashes from "@/components/paint-splashes";
 import PaintDrops from "@/components/paint-drops";
-import carouselImages from "@/constansts/carousel-images";
+import carouselImages from "@/constants/carousel-images";
 import FullWidthCarousel from "@/components/full-width-carousel";
 import AnimatedBackgroundShapes from "@/components/animated-background-shapes";
 import ParallaxBackground from "@/components/parallax-background";
@@ -13,6 +13,7 @@ import StatsCounter from "@/components/stats-counter";
 import FeaturesHeader from "@/components/features-header";
 import FeatureCards from "@/components/feature-cards";
 import PaintBrushCursor from "@/components/paint-brush-cursor";
+import ImageGallery from "@/components/image-gallery"; // Add this import
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,6 +21,7 @@ export default function Home() {
   const heroRef = useRef(null);
   const statsRef = useRef(null);
   const featuresRef = useRef(null);
+  const galleryRef = useRef(null); // Add this ref
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -140,6 +142,18 @@ export default function Home() {
 
         {/* Animated paint splashes */}
         <PaintSplashes />
+      </motion.section>
+
+      {/* Add the new Image Gallery section here */}
+      <motion.section
+        ref={galleryRef}
+        className="relative py-24 overflow-hidden bg-gray-50"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <ImageGallery />
       </motion.section>
 
       {/* Floating paint brush cursor effect */}

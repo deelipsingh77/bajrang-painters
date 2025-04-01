@@ -2,7 +2,7 @@ import { motion, AnimatePresence, useAnimate } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import TextReveal from "./text-reveal";
-import carouselImages from "@/constansts/carousel-images";
+import carouselImages from "@/constants/carousel-images";
 import { Button } from "./ui/button";
 
 // Full-Width Carousel Component
@@ -20,10 +20,26 @@ function FullWidthCarousel({
   const [scope, animate] = useAnimate();
   const constraintsRef = useRef(null);
 
+  // Preload images
+  useEffect(() => {
+    carouselImages.forEach((image) => {
+      const img = new window.Image();
+      img.src = image.src;
+    });
+  }, []);
+
   // Animation for slide change
   useEffect(() => {
-    animate(scope.current, { opacity: [0.5, 1] }, { duration: 0.5 });
+    if (scope.current) {
+      animate(scope.current, { opacity: [0.5, 1] }, { duration: 0.5 });
+    }
   }, [currentSlide, animate, scope]);
+
+  // Ensure current slide is valid
+  const safeSlideIndex = Math.max(
+    0,
+    Math.min(currentSlide, carouselImages.length - 1)
+  );
 
   return (
     <div
@@ -31,69 +47,65 @@ function FullWidthCarousel({
       ref={constraintsRef}
     >
       {/* Carousel content */}
-      <AnimatePresence initial={false} mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
-          key={currentSlide}
+          key={safeSlideIndex}
           ref={scope}
           className="absolute inset-0 w-full h-full"
           initial={{
             opacity: 0,
-            scale: 1.1,
+            scale: 1.05,
           }}
           animate={{
             opacity: 1,
             scale: 1,
             transition: {
-              duration: 0.8,
-              ease: [0.25, 0.1, 0.25, 1.0],
+              duration: 0.6,
+              ease: "easeOut",
             },
           }}
           exit={{
             opacity: 0,
             scale: 0.95,
             transition: {
-              duration: 0.5,
-              ease: [0.25, 0.1, 0.25, 1.0],
+              duration: 0.4,
+              ease: "easeIn",
             },
           }}
         >
-          {/* Background image with parallax effect */}
-          <motion.div
-            className="absolute inset-0 w-full h-full"
-            initial={{ scale: 1.2 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 6, ease: "easeOut" }}
-          >
+          {/* Background image with simpler animation */}
+          <div className="absolute inset-0 w-full h-full">
             <Image
-              src={carouselImages[currentSlide].src || "/placeholder.svg"}
-              alt={carouselImages[currentSlide].alt}
+              src={carouselImages[safeSlideIndex].src}
+              alt={carouselImages[safeSlideIndex].alt}
               fill
               className="object-cover"
               priority
+              sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-          </motion.div>
+          </div>
 
           {/* Content overlay */}
           <div className="absolute inset-0 flex items-center z-10">
             <div className="container mx-auto px-6 md:px-12">
               <div className="max-w-xl">
-                <TextReveal text={carouselImages[currentSlide].title} />
+                <TextReveal text={carouselImages[safeSlideIndex].title} />
 
                 <motion.p
                   className="text-lg text-white/90 mt-6 drop-shadow-lg"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.8 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
                 >
-                  {carouselImages[currentSlide].description}
+                  {carouselImages[safeSlideIndex].description}
                 </motion.p>
 
                 <motion.div
                   className="mt-8"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8, duration: 0.8 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
                 >
                   <Button
                     size="lg"
@@ -120,7 +132,7 @@ function FullWidthCarousel({
             animate={{ y: 0 }}
             transition={{
               duration: 0.8,
-              delay: 0.5,
+              delay: 0.3,
               type: "spring",
               stiffness: 100,
               damping: 20,
@@ -129,36 +141,76 @@ function FullWidthCarousel({
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation dots - keeping these for accessibility and user control */}
+      {/* Navigation controls - improved for better visibility and usability */}
       <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center space-x-4">
         {carouselImages.map((_, index) => (
           <motion.button
             key={index}
             className={`w-3 h-3 rounded-full ${
-              currentSlide === index ? "bg-white" : "bg-white/40"
+              safeSlideIndex === index ? "bg-white" : "bg-white/40"
             }`}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{
-              delay: 1 + index * 0.1,
+              delay: 0.5 + index * 0.1,
               type: "spring",
               stiffness: 400,
               damping: 10,
             }}
             onClick={() => {
-              if (index > currentSlide) {
+              if (index > safeSlideIndex) {
                 nextSlide();
-              } else if (index < currentSlide) {
+              } else if (index < safeSlideIndex) {
                 prevSlide();
               }
             }}
             whileHover={{ scale: 1.5 }}
             whileTap={{ scale: 0.9 }}
+            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
 
-      {/* Arrow navigation buttons have been removed */}
+      {/* Add arrow navigation buttons for better UX */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
+        aria-label="Previous slide"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <button
+        onClick={nextSlide}
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
+        aria-label="Next slide"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
     </div>
   );
 }
