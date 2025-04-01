@@ -1,5 +1,5 @@
-// app/api/getImages/route.js
-import { v2 as cloudinary} from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
+import { NextResponse } from "next/server";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,46 +7,32 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-interface CloudinaryResource {
-  asset_id: string;
-  public_id: string;
-  format: string;
-  version: number;
-  resource_type: string;
-  type: string;
-  created_at: string;
-  bytes: number;
-  width: number;
-  height: number;
-  url: string;
-  secure_url: string;
-}
-
-export async function getImagesFromFolder(folderName: string): Promise<CloudinaryResource[]> {
+// Move the function inside GET handler to fix the Vercel deployment error
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const folder = searchParams.get("folder");
+
+    if (!folder) {
+      return NextResponse.json(
+        { error: "Folder query parameter is required" },
+        { status: 400 }
+      );
+    }
+
+    // Moved getImagesFromFolder logic here
     const result = await cloudinary.api.resources({
       type: "upload",
-      prefix: folderName, // specify the folder name
-      max_results: 500, // You can adjust the number of images you want to fetch
+      prefix: folder,
+      max_results: 500,
     });
-    return result.resources;
+
+    return NextResponse.json(result.resources);
   } catch (error) {
     console.error("Error fetching images from Cloudinary:", error);
-    return [];
+    return NextResponse.json(
+      { error: "Failed to fetch images" },
+      { status: 500 }
+    );
   }
-}
-
-export async function GET(request: Request): Promise<Response> {
-  const { searchParams } = new URL(request.url);
-  const folder = searchParams.get("folder");
-
-  if (!folder) {
-    return new Response("Folder query parameter is required", { status: 400 });
-  }
-
-  const images = await getImagesFromFolder(folder);
-
-  return new Response(JSON.stringify(images), {
-    headers: { "Content-Type": "application/json" },
-  });
 }
