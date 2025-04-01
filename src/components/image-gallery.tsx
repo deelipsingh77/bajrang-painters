@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import ImageCarousel from "./image-carousel";
 
 interface CloudinaryImage {
   asset_id: string;
@@ -125,6 +126,21 @@ export default function ImageGallery() {
             Browse through our collection of stunning transformation projects.
           </p>
         </div>
+
+        {/* Featured Carousel - Add this section */}
+        {!isLoading && !error && allImages.length > 0 && (
+          <div className="mb-16">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
+              Featured Work
+            </h3>
+            <ImageCarousel 
+              images={allImages} 
+              categoryColors={categoryColors}
+              folderToCategory={folderToCategory}
+              speed={100}
+            />
+          </div>
+        )}
 
         {/* Category filters */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
