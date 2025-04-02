@@ -12,7 +12,7 @@ import StatsHeader from "@/components/stats-header";
 import StatsCounter from "@/components/stats-counter";
 import FeaturesHeader from "@/components/features-header";
 import FeatureCards from "@/components/feature-cards";
-import PaintBrushCursor from "@/components/paint-brush-cursor";
+// import PaintBrushCursor from "@/components/paint-brush-cursor";
 import ImageGallery from "@/components/image-gallery"; // Add this import
 
 export default function Home() {
@@ -157,7 +157,7 @@ export default function Home() {
       </motion.section>
 
       {/* Floating paint brush cursor effect */}
-      <PaintBrushCursor />
+      {/* <PaintBrushCursor /> */}
     </motion.div>
   );
 }
