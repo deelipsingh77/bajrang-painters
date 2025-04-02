@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 // import PaintSplashes from "@/components/paint-splashes";
 // import PaintDrops from "@/components/paint-drops";
 import carouselImages from "@/constants/carousel-images";
@@ -60,6 +60,25 @@ export default function Home() {
     setCurrentSlide(
       (prev) => (prev - 1 + carouselImages.length) % carouselImages.length
     );
+  };
+
+  // Add these state variables
+  const [modalImage, setModalImage] = useState<string | null>(null);
+  const [modalAlt, setModalAlt] = useState<string>("");
+
+  // Add this function to open the modal
+  const openImageModal = (src: string, alt: string) => {
+    setModalImage(src);
+    setModalAlt(alt);
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = "hidden";
+  };
+
+  // Add this function to close the modal
+  const closeImageModal = () => {
+    setModalImage(null);
+    // Re-enable scrolling
+    document.body.style.overflow = "auto";
   };
 
   return (
@@ -259,11 +278,15 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-8 justify-center items-center mt-10">
             {/* Before Card */}
             <motion.div 
-              className="relative group w-full md:w-2/5 overflow-hidden rounded-xl shadow-lg"
+              className="relative group w-full md:w-2/5 overflow-hidden rounded-xl shadow-lg cursor-pointer"
               initial={{ x: -50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05 }}
+              onClick={() => openImageModal(
+                "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/before-after/zeizppsqgxf8dnauvlk5",
+                "Before renovation"
+              )}
             >
               <motion.div 
                 className="aspect-video bg-gray-100 overflow-hidden"
@@ -310,11 +333,15 @@ export default function Home() {
             
             {/* After Card */}
             <motion.div 
-              className="relative group w-full md:w-2/5 overflow-hidden rounded-xl shadow-lg"
+              className="relative group w-full md:w-2/5 overflow-hidden rounded-xl shadow-lg cursor-pointer"
               initial={{ x: 50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05 }}
+              onClick={() => openImageModal(
+                "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/before-after/lwhiguyv1p9ab6fkl7fq",
+                "After renovation"
+              )}
             >
               <motion.div 
                 className="aspect-video bg-gray-100 overflow-hidden"
@@ -349,7 +376,7 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            Hover over images to see details. Click to expand.
+            Click on images to view in full size.
           </motion.p>
         </div>
       </motion.section>
@@ -403,6 +430,74 @@ export default function Home() {
 
       {/* Floating paint brush cursor effect */}
       {/* <PaintBrushCursor /> */}
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {modalImage && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/80"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={closeImageModal}
+          >
+            <motion.div
+              className="relative max-w-5xl w-full overflow-hidden rounded-xl"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ 
+                type: "spring", 
+                damping: 20, 
+                stiffness: 100 
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <motion.button
+                className="absolute top-4 right-4 z-10 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={closeImageModal}
+                aria-label="Close image"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-6 w-6" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M6 18L18 6M6 6l12 12" 
+                  />
+                </svg>
+              </motion.button>
+              
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Image
+                  src={modalImage}
+                  alt={modalAlt}
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto object-contain"
+                  priority
+                />
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
