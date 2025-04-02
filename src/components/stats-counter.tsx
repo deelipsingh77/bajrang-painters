@@ -122,19 +122,19 @@ function StatsCounter() {
       viewport={{ once: true, amount: 0.3 }}
     >
       <StatItem
-        number={3690}
+        number={1360}
         label="Successful Projects"
         delay={0.2}
         color="from-pink-500 to-purple-500"
       />
       <StatItem
-        number={10}
+        number={9}
         label="Years Experience"
         delay={0.4}
         color="from-blue-500 to-cyan-500"
       />
       <StatItem
-        number={8800}
+        number={1261}
         label="Happy Clients"
         delay={0.6}
         color="from-green-500 to-emerald-500"
