@@ -6,7 +6,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 // import PaintDrops from "@/components/paint-drops";
 import carouselImages from "@/constants/carousel-images";
 import FullWidthCarousel from "@/components/full-width-carousel";
-import AnimatedBackgroundShapes from "@/components/animated-background-shapes";
+// import AnimatedBackgroundShapes from "@/components/animated-background-shapes";
 import ParallaxBackground from "@/components/parallax-background";
 import StatsHeader from "@/components/stats-header";
 import StatsCounter from "@/components/stats-counter";
@@ -106,7 +106,7 @@ export default function Home() {
         />
 
         {/* Animated background elements */}
-        <AnimatedBackgroundShapes />
+        {/* <AnimatedBackgroundShapes /> */}
       </motion.section>
 
       {/* Stats Section with Parallax */}
