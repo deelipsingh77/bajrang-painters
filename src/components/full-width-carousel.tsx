@@ -1,9 +1,8 @@
 import { motion, AnimatePresence, useAnimate } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import TextReveal from "./text-reveal";
 import carouselItems from "@/constants/carousel-images";
-import { Button } from "./ui/button";
+// import { Button } from "./ui/button";
 
 // Define types for carousel items
 interface BaseCarouselItem {
@@ -38,9 +37,15 @@ function FullWidthCarousel({
   nextSlide,
   prevSlide,
 }: FullWidthCarouselProps) {
-  const [scope, animate] = useAnimate();
+  const [scope] = useAnimate();
   const constraintsRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Ensure current slide is valid
+  const safeSlideIndex = Math.max(
+    0,
+    Math.min(currentSlide, carouselItems.length - 1)
+  );
 
   // Preload images
   useEffect(() => {
@@ -69,21 +74,9 @@ function FullWidthCarousel({
         });
       }
     }
-  }, [currentSlide]);
+  }, [currentSlide, safeSlideIndex]);
 
   // Animation for slide change
-  useEffect(() => {
-    if (scope.current) {
-      animate(scope.current, { opacity: [0.5, 1] }, { duration: 0.5 });
-    }
-  }, [currentSlide, animate, scope]);
-
-  // Ensure current slide is valid
-  const safeSlideIndex = Math.max(
-    0,
-    Math.min(currentSlide, carouselItems.length - 1)
-  );
-
   // Get current item
   const currentItem = carouselItems[safeSlideIndex] as CarouselItem;
 
@@ -140,8 +133,7 @@ function FullWidthCarousel({
                   muted
                   loop
                 >
-                  <source src={`${currentItem.src}.mp4`} type="video/mp4" />
-                  <source src={`${currentItem.src}.webm`} type="video/webm" />
+                  <source src={currentItem.src} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 <div className="absolute bottom-6 right-6 z-20">
@@ -177,41 +169,32 @@ function FullWidthCarousel({
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
           </div>
 
-          {/* Content overlay */}
-          <div className="absolute inset-0 flex items-center z-10">
-            <div className="container mx-auto px-6 md:px-12">
-              <div className="max-w-xl">
-                <TextReveal text={currentItem.title} />
-
-                <motion.p
-                  className="text-lg text-white/90 mt-6 drop-shadow-lg"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                >
-                  {currentItem.description}
-                </motion.p>
-
-                <motion.div
-                  className="mt-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.6 }}
-                >
-                  <Button
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90 relative overflow-hidden group"
-                  >
-                    <span className="relative z-10">Get Started</span>
-                    <motion.span
-                      className="absolute inset-0 bg-white"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: "100%" }}
-                      transition={{ duration: 0.5 }}
-                      style={{ opacity: 0.3 }}
-                    />
-                  </Button>
-                </motion.div>
+          {/* Logo and Animated Domain Text */}
+          <div className="absolute top-1/3 left-0 right-0 z-10 flex justify-center">
+            <div className="px-8 py-6 rounded-xl flex items-center gap-4 md:gap-6">
+              {/* Logo */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 15,
+                  delay: 0.2,
+                }}
+              >
+                <Image
+                  src="https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/logos/gcmugfkpeirxcxnojdc9"
+                  alt="Bajrang Painters Logo"
+                  width={100}
+                  height={100}
+                  className="w-16 h-16 md:w-20 md:h-20 object-contain"
+                />
+              </motion.div>
+              
+              {/* Animated Domain Text */}
+              <div className="text-white font-bold text-2xl md:text-3xl lg:text-4xl">
+                <AnimatedText text="bajrangpainters.com" />
               </div>
             </div>
           </div>
@@ -315,6 +298,31 @@ function FullWidthCarousel({
         ))}
       </div>
     </div>
+  );
+}
+
+// Animated text component for domain name
+function AnimatedText({ text }: { text: string }) {
+  return (
+    <motion.div className="flex overflow-hidden">
+      {text.split('').map((char, index) => (
+        <motion.span
+          key={`${char}-${index}`}
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{
+            delay: 0.3 + index * 0.06,
+            duration: 0.6,
+            type: "spring",
+            stiffness: 100,
+            damping: 10
+          }}
+          className="inline-block"
+        >
+          {char}
+        </motion.span>
+      ))}
+    </motion.div>
   );
 }
 
