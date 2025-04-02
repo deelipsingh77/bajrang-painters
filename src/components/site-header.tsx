@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BrushIcon, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,11 +72,18 @@ export function SiteHeader() {
           : "bg-transparent border-transparent"
       }`}
     >
-      <div className="container px-4 md:px-6 mx-auto flex h-16 items-center justify-between">
+      <div className="container px-4 md:px-6 mx-auto flex h-24 items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <BrushIcon className="h-6 w-6" />
-            <span className="font-bold text-lg">Bajrang Painters</span>
+            <Image
+              src="https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/logos/wnmdbthsrv8d71hgjdk9"
+              alt="Bajrang Painters Logo"
+              width={851}
+              height={412}
+              className="h-20 w-auto ml-4 sm:ml-24 mix-blend-multiply" 
+              priority
+            />
+            {/* <span className="font-bold text-lg">Bajrang Painters</span> */}
           </Link>
         </div>
 

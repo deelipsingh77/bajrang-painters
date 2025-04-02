@@ -1,7 +1,7 @@
 // Hero carousel images
 const carouselImages = [
   {
-    src: "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/fgfmcddny3w3tf7vssn5",
+    src: "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/commercial/yihkfijyxihrxgbuhxsa",
     alt: "Painting Services",
     title: "Crafting Beautiful Spaces with Precision and Passion",
     description:
@@ -15,7 +15,7 @@ const carouselImages = [
       "Our expert team brings new life to your home with premium paints and meticulous attention to detail.",
   },
   {
-    src: "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/ioq4ys9yjhebsxgqmbtc",
+    src: "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/commercial/c0blgjsb7yfwbp3r79ni",
     alt: "Exterior Painting",
     title: "Elevate Your Home's Curb Appeal",
     description:

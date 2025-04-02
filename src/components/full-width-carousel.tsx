@@ -79,7 +79,7 @@ function FullWidthCarousel({
               src={carouselImages[safeSlideIndex].src}
               alt={carouselImages[safeSlideIndex].alt}
               fill
-              className="object-cover"
+              className="object-cover object-top"
               priority
               sizes="100vw"
             />

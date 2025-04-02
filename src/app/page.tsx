@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import PaintSplashes from "@/components/paint-splashes";
-import PaintDrops from "@/components/paint-drops";
+// import PaintSplashes from "@/components/paint-splashes";
+// import PaintDrops from "@/components/paint-drops";
 import carouselImages from "@/constants/carousel-images";
 import FullWidthCarousel from "@/components/full-width-carousel";
 import AnimatedBackgroundShapes from "@/components/animated-background-shapes";
@@ -86,7 +86,7 @@ export default function Home() {
       />
 
       {/* Floating paint drops */}
-      <PaintDrops />
+      {/* <PaintDrops /> */}
 
       {/* Hero Section with Full-Width Carousel */}
       <motion.section
@@ -141,7 +141,7 @@ export default function Home() {
         </div>
 
         {/* Animated paint splashes */}
-        <PaintSplashes />
+        {/* <PaintSplashes /> */}
       </motion.section>
 
       {/* Add the new Image Gallery section here */}
