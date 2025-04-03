@@ -22,6 +22,7 @@ import FeatureCards from "@/components/feature-cards";
 // import ImageGallery from "@/components/image-gallery"; // Add this import
 import Image from "next/image";
 import StandaloneCarousel from "@/components/standalone-carousel";
+import { ContactDialog } from "@/components/contact-dialog";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -96,6 +97,13 @@ export default function Home() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
+      {/* Add ContactDialog with 30 second delay */}
+      <ContactDialog
+        timer={30000}
+        title="Contact Us"
+        description="Tell us about your project and we'll get back to you."
+      />
+
       {/* Animated background gradient */}
       <motion.div
         className="fixed inset-0 z-0 bg-gradient-to-b from-blue-50 to-white"
@@ -170,7 +178,7 @@ export default function Home() {
                 viewport={{ once: true }}
               >
                 <motion.span
-                  className="h-1 bg-black rounded-full block"
+                  className="h-1 bg-blue-600 rounded-full block"
                   initial={{ width: 0 }}
                   whileInView={{ width: "700px" }}
                   transition={{

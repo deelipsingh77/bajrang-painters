@@ -2,10 +2,11 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BrushIcon, HomeIcon, BuildingIcon, WrenchIcon, SprayCan } from "lucide-react";
+import { BrushIcon, HomeIcon, BuildingIcon, WrenchIcon } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { ContactDialog } from "@/components/contact-dialog";
 
 export default function ServicesPage() {
   const services = [
@@ -42,6 +43,7 @@ export default function ServicesPage() {
   ];
 
   const [open, setOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   interface Service {
@@ -63,6 +65,15 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen">
+
+      <ContactDialog
+        timer={30000}
+        open={contactOpen}
+        onOpenChange={setContactOpen}
+        title="Contact Us"
+        description="Tell us about your project and we'll get back to you."
+      />
+
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
@@ -102,7 +113,7 @@ export default function ServicesPage() {
             <p className="text-gray-600 mb-8">
               Contact us today for a free consultation and quote
             </p>
-            <Button size="lg">Get Started</Button>
+            <Button size="lg" onClick={() => setContactOpen(true)}>Get Started</Button>
           </div>
         </div>
       </section>
