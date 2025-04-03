@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  AnimatePresence,
+} from "framer-motion";
 // import PaintSplashes from "@/components/paint-splashes";
 // import PaintDrops from "@/components/paint-drops";
 import carouselImages from "@/constants/carousel-images";
@@ -15,6 +21,7 @@ import FeatureCards from "@/components/feature-cards";
 // import PaintBrushCursor from "@/components/paint-brush-cursor";
 // import ImageGallery from "@/components/image-gallery"; // Add this import
 import Image from "next/image";
+import StandaloneCarousel from "@/components/standalone-carousel";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -247,7 +254,7 @@ export default function Home() {
       </motion.section>
 
       {/* Before & After Section */}
-      <motion.section 
+      <motion.section
         className="relative py-20 overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -255,7 +262,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.2 }}
       >
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial={{ y: -20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -265,7 +272,8 @@ export default function Home() {
               Transformative Results
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              See the dramatic difference our professional painting services can make to your property.
+              See the dramatic difference our professional painting services can
+              make to your property.
             </p>
             <motion.div
               className="h-1 w-40 bg-blue-600 mx-auto mt-6 rounded-full"
@@ -277,18 +285,20 @@ export default function Home() {
 
           <div className="flex flex-col md:flex-row gap-8 justify-center items-center mt-10">
             {/* Before Card */}
-            <motion.div 
+            <motion.div
               className="relative group w-full md:w-2/5 overflow-hidden rounded-xl shadow-lg cursor-pointer"
               initial={{ x: -50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05 }}
-              onClick={() => openImageModal(
-                "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/before-after/zeizppsqgxf8dnauvlk5",
-                "Before renovation"
-              )}
+              onClick={() =>
+                openImageModal(
+                  "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/before-after/zeizppsqgxf8dnauvlk5",
+                  "Before renovation"
+                )
+              }
             >
-              <motion.div 
+              <motion.div
                 className="aspect-video bg-gray-100 overflow-hidden"
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.5 }}
@@ -313,9 +323,9 @@ export default function Home() {
                 Before
               </div>
             </motion.div>
-            
+
             {/* Arrow animation */}
-            <motion.div 
+            <motion.div
               className="hidden md:flex items-center justify-center"
               initial={{ scale: 0, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
@@ -325,25 +335,38 @@ export default function Home() {
                 animate={{ x: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-12 w-12 text-blue-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
                 </svg>
               </motion.div>
             </motion.div>
-            
+
             {/* After Card */}
-            <motion.div 
+            <motion.div
               className="relative group w-full md:w-2/5 overflow-hidden rounded-xl shadow-lg cursor-pointer"
               initial={{ x: 50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05 }}
-              onClick={() => openImageModal(
-                "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/before-after/lwhiguyv1p9ab6fkl7fq",
-                "After renovation"
-              )}
+              onClick={() =>
+                openImageModal(
+                  "https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/before-after/lwhiguyv1p9ab6fkl7fq",
+                  "After renovation"
+                )
+              }
             >
-              <motion.div 
+              <motion.div
                 className="aspect-video bg-gray-100 overflow-hidden"
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.5 }}
@@ -369,7 +392,7 @@ export default function Home() {
               </div>
             </motion.div>
           </div>
-          
+
           <motion.p
             className="text-center mt-8 text-gray-600 italic"
             initial={{ opacity: 0 }}
@@ -435,10 +458,10 @@ export default function Home() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ 
-                type: "spring", 
-                damping: 20, 
-                stiffness: 100 
+              transition={{
+                type: "spring",
+                damping: 20,
+                stiffness: 100,
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -452,22 +475,22 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-6 w-6" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M6 18L18 6M6 6l12 12" 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </motion.button>
-              
+
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -486,6 +509,43 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Featured Projects Carousel Section */}
+      <motion.section
+        className="relative py-20 overflow-hidden bg-gradient-to-r from-gray-50 to-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            className="text-center mb-8"
+            initial={{ y: -20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
+              Our Featured Projects
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              Browse through our portfolio of transformations.
+            </p>
+            <motion.div
+              className="h-1 w-40 bg-blue-600 mx-auto mt-6 rounded-full"
+              initial={{ width: 0 }}
+              whileInView={{ width: "10rem" }}
+              transition={{ duration: 1, delay: 0.2 }}
+            />
+          </motion.div>
+
+          <StandaloneCarousel
+            title="Featured Projects"
+            maxImages={50}
+            speed={50}
+          />
+        </div>
+      </motion.section>
     </motion.div>
   );
 }

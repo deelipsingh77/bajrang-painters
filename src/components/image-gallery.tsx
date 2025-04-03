@@ -1,117 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import ImageCarousel from "./image-carousel";
-
-interface CloudinaryImage {
-  asset_id: string;
-  public_id: string;
-  format: string;
-  secure_url: string;
-  width: number;
-  height: number;
-  folder: string;
-}
-
-interface GalleryImage extends CloudinaryImage {
-  alt: string;
-  category: string;
-}
-
-const baseFolderPath = "Bajrang Painters";
-
-const folderToCategory: { [key: string]: string } = {
-  "commercial": "Commercial",
-  "residential": "Residential", 
-  "interior": "Interior",
-  "exterior": "Exterior",
-  "samples": "Samples"
-};
-
-// Add badge colors for different categories
-const categoryColors: { [key: string]: string } = {
-  "commercial": "bg-blue-500",
-  "residential": "bg-green-500",
-  "interior": "bg-purple-500",
-  "exterior": "bg-orange-500",
-  "samples": "bg-pink-500",
-};
+import { useImages } from "@/context/ImageContext";
 
 export default function ImageGallery() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [allImages, setAllImages] = useState<GalleryImage[]>([]);
-
-  // Function to fetch images from a specific folder
-  const fetchImagesFromFolder = async (folder: string) => {
-    try {
-      const encodedFolder = encodeURIComponent(folder);
-      const response = await fetch(`/api/getImages?folder=${encodedFolder}`);
-      
-      if (!response.ok) {
-        throw new Error(`Error fetching images: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      if (!data || !Array.isArray(data) || data.length === 0) {
-        return [];
-      }
-      
-      return data.map((item: CloudinaryImage) => {
-        const pathParts = item.folder.split('/');
-        const categoryFromFolder = pathParts[pathParts.length - 1].toLowerCase();
-        
-        return {
-          ...item,
-          alt: `${folderToCategory[categoryFromFolder] || categoryFromFolder} painting project`,
-          category: categoryFromFolder
-        };
-      });
-    } catch (error) {
-      console.error(`Failed to fetch images from ${folder}:`, error);
-      return [];
-    }
-  };
-
-  // Load all images on mount
-  useEffect(() => {
-    async function loadAllImages() {
-      setIsLoading(true);
-      setError(null);
-      
-      try {
-        const categories = Object.keys(folderToCategory);
-        const imagePromises = categories.map(category => 
-          fetchImagesFromFolder(`${baseFolderPath}/${category}`)
-        );
-        
-        const results = await Promise.all(imagePromises);
-        const allLoadedImages = results.flat().filter(Boolean);
-        
-        if (allLoadedImages.length === 0) {
-          setError("No images found");
-          return;
-        }
-        
-        setAllImages(allLoadedImages);
-      } catch (err) {
-        setError((err as Error).message || "Failed to load images");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    
-    loadAllImages();
-  }, []);
+  const {
+    allImages,
+    isLoading,
+    error,
+    categoryColors,
+    folderToCategory,
+    categories,
+    refreshImages,
+  } = useImages();
 
   // Filter images based on active category
-  const filteredImages = activeCategory === "all" 
-    ? allImages 
-    : allImages.filter(img => img.category === activeCategory);
-
-  // Get unique categories
-  const categories = ["all", ...new Set(allImages.map(img => img.category))];
+  const filteredImages =
+    activeCategory === "all"
+      ? allImages
+      : allImages.filter((img) => img.category === activeCategory);
 
   return (
     <section className="pb-20">
@@ -127,21 +34,6 @@ export default function ImageGallery() {
           </p>
         </div>
 
-        {/* Featured Carousel - Add this section */}
-        {!isLoading && !error && allImages.length > 0 && (
-          <div className="mb-16">
-            <h3 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-              Featured Work
-            </h3>
-            <ImageCarousel 
-              images={allImages} 
-              categoryColors={categoryColors}
-              folderToCategory={folderToCategory}
-              speed={100}
-            />
-          </div>
-        )}
-
         {/* Category filters */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {categories.map((category) => (
@@ -154,9 +46,10 @@ export default function ImageGallery() {
               }`}
               onClick={() => setActiveCategory(category)}
             >
-              {category === "all" 
-                ? "All Projects" 
-                : folderToCategory[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              {category === "all"
+                ? "All Projects"
+                : folderToCategory[category] ||
+                  category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
           ))}
         </div>
@@ -172,9 +65,9 @@ export default function ImageGallery() {
         {error && !isLoading && (
           <div className="text-center py-10">
             <p className="text-red-500">{error}</p>
-            <button 
+            <button
               className="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
-              onClick={() => window.location.reload()}
+              onClick={refreshImages}
             >
               Try Again
             </button>
@@ -192,11 +85,11 @@ export default function ImageGallery() {
                 >
                   {/* Category Badge - Always visible */}
                   <div className="absolute top-4 left-4 z-10">
-                    <span 
+                    <span
                       className={`
                         px-3 py-1 rounded-full text-xs font-medium text-white
                         shadow-lg backdrop-blur-sm
-                        ${categoryColors[image.category] || 'bg-gray-500'}
+                        ${categoryColors[image.category] || "bg-gray-500"}
                       `}
                     >
                       {folderToCategory[image.category] || image.category}
@@ -211,13 +104,11 @@ export default function ImageGallery() {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     priority={false}
                   />
-                  
+
                   {/* Hover overlay - Now only shows the title */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="absolute bottom-4 left-4">
-                      <h3 className="text-white font-medium">
-                        {image.alt}
-                      </h3>
+                      <h3 className="text-white font-medium">{image.alt}</h3>
                     </div>
                   </div>
                 </div>
