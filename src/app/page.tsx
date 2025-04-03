@@ -98,13 +98,6 @@ export default function Home() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Add ContactDialog with 30 second delay */}
-      <ContactDialog
-        timer={30000}
-        title="Contact Us"
-        description="Tell us about your project and we'll get back to you."
-      />
-
       {/* Add ContactDialog */}
       <ContactDialog
         open={contactOpen}

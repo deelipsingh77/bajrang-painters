@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { BrushIcon, PhoneIcon, MailIcon, MapPinIcon } from "lucide-react";
+import { PhoneIcon, MailIcon, MapPinIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 interface SiteFooterProps {
@@ -12,12 +13,20 @@ export function SiteFooter({ className }: SiteFooterProps) {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center space-x-2 text-white mb-4">
-              <BrushIcon className="h-6 w-6" />
-              <span className="font-bold text-lg">Painting Services</span>
+            <div className="flex items-center justify-start mb-6">
+              <Link href="/" className="inline-block">
+                <Image
+                  src="https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/logos/wnmdbthsrv8d71hgjdk9"
+                  alt="Bajrang Painters Logo"
+                  width={200}
+                  height={97}
+                  className="w-auto h-20 object-contain bg-white rounded-lg p-2 shadow-md hover:shadow-lg transition-shadow"
+                  priority
+                />
+              </Link>
             </div>
-            <p className="text-gray-400">
-              We are familiar with the latest equipment and techniques
+            <p className="text-gray-400 mt-4 text-sm leading-relaxed max-w-xs">
+              We are familiar with the latest equipment and techniques in the painting industry to deliver exceptional results.
             </p>
           </div>
 
