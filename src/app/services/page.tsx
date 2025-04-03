@@ -2,10 +2,28 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BrushIcon, PaintBucketIcon, HomeIcon, BuildingIcon, WrenchIcon, SprayCan } from "lucide-react";
+import { BrushIcon, HomeIcon, BuildingIcon, WrenchIcon, SprayCan } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 
 export default function ServicesPage() {
   const services = [
+    {
+      title: "Industrial Painting",
+      description: "Specialized painting solutions for factories, warehouses, and industrial facilities with durable finishes.",
+      icon: WrenchIcon,
+    },
+    {
+      title: "Commercial Painting",
+      description: "Large-scale painting services for commercial properties, offices, and retail spaces.",
+      icon: BuildingIcon,
+    },
+    {
+      title: "Apartments Painting",
+      description: "Custom painting services for apartment complexes and multi-family residential buildings.",
+      icon: BuildingIcon,
+    },
     {
       title: "Interior Painting",
       description: "Professional interior painting services for homes and businesses with attention to detail and premium materials.",
@@ -17,26 +35,31 @@ export default function ServicesPage() {
       icon: BrushIcon,
     },
     {
-      title: "Commercial Painting",
-      description: "Large-scale painting services for commercial properties, offices, and retail spaces.",
-      icon: BuildingIcon,
-    },
-    {
-      title: "Damp Proofing",
-      description: "Effective solutions for moisture problems and waterproofing services.",
-      icon: WrenchIcon,
-    },
-    {
-      title: "Roof Painting",
-      description: "Specialized roof painting and coating services for protection and aesthetics.",
-      icon: PaintBucketIcon,
-    },
-    {
-      title: "Wall Restoration",
-      description: "Complete wall restoration and repair services to revive damaged surfaces.",
-      icon: SprayCan,
+      title: "Residential Painting",
+      description: "Complete painting solutions for homes and residential properties with expert color consultation and quality finishes.",
+      icon: HomeIcon,
     },
   ];
+
+  const [open, setOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+
+  interface Service {
+    title: string;
+    description: string;
+    icon: React.ElementType;
+  }
+
+
+  const handleCardClick = (service: Service): void => {
+    setSelectedService(service);
+    setOpen(true);
+  };
+
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+
 
   return (
     <div className="min-h-screen">
@@ -57,11 +80,14 @@ export default function ServicesPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => handleCardClick(service)}
+              >
                 <service.icon className="w-12 h-12 text-primary mb-4" />
                 <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
                 <p className="text-gray-600 mb-4">{service.description}</p>
-                <Button variant="outline" className="w-full">Learn More</Button>
               </Card>
             ))}
           </div>
@@ -80,6 +106,33 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+
+      {/* Modal */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          {selectedService && (
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">
+                  {selectedService.title}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex items-center gap-4 py-4">
+                <selectedService.icon className="w-12 h-12 text-primary" />
+                <DialogDescription className="text-lg">
+                  {selectedService.description}
+                </DialogDescription>
+              </div>
+            </motion.div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, useAnimationControls, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { getCategoryColor, getCategoryLabel } from "@/utils/colorUtils";
 
 interface CarouselProps {
   images: {
@@ -117,16 +119,15 @@ export default function ImageCarousel({
               className="relative h-64 w-72 flex-shrink-0 mx-2 rounded-lg overflow-hidden shadow-lg group cursor-pointer"
               onClick={() => openImageModal(image.secure_url, image.alt)}
             >
-              {/* Category Badge */}
+              {/* Category Badge with utility functions */}
               <div className="absolute top-4 left-4 z-10">
                 <span
-                  className={`
-                    px-3 py-1 rounded-full text-xs font-medium text-white
-                    shadow-lg backdrop-blur-sm
-                    ${categoryColors[image.category] || "bg-gray-500"}
-                  `}
+                  className={cn(
+                    "px-3 py-1 rounded-full text-xs font-medium text-white shadow-lg backdrop-blur-sm",
+                    getCategoryColor(image.category, categoryColors)
+                  )}
                 >
-                  {folderToCategory[image.category] || image.category}
+                  {getCategoryLabel(image.category, folderToCategory)}
                 </span>
               </div>
 
