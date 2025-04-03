@@ -30,12 +30,14 @@ interface FullWidthCarouselProps {
   currentSlide: number;
   nextSlide: () => void;
   prevSlide: () => void;
+  setContactOpen: (open: boolean) => void; // Add this
 }
 
 function FullWidthCarousel({
   currentSlide,
   nextSlide,
   prevSlide,
+  setContactOpen, // Add this
 }: FullWidthCarouselProps) {
   const [scope] = useAnimate();
   const constraintsRef = useRef(null);
@@ -265,6 +267,21 @@ function FullWidthCarousel({
           >
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
+        </motion.button>
+      </div>
+
+      {/* Add the Get Started button above the dots */}
+      <div className="absolute bottom-24 left-0 right-0 z-20 flex justify-center">
+        <motion.button
+          onClick={() => setContactOpen(true)}
+          className="px-8 py-3 bg-primary text-white rounded-full font-semibold shadow-lg hover:bg-primary/90 transition-colors"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Get Started
         </motion.button>
       </div>
 

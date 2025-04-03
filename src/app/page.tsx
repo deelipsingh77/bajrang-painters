@@ -73,6 +73,7 @@ export default function Home() {
   // Add these state variables
   const [modalImage, setModalImage] = useState<string | null>(null);
   const [modalAlt, setModalAlt] = useState<string>("");
+  const [contactOpen, setContactOpen] = useState(false);
 
   // Add this function to open the modal
   const openImageModal = (src: string, alt: string) => {
@@ -100,6 +101,14 @@ export default function Home() {
       {/* Add ContactDialog with 30 second delay */}
       <ContactDialog
         timer={30000}
+        title="Contact Us"
+        description="Tell us about your project and we'll get back to you."
+      />
+
+      {/* Add ContactDialog */}
+      <ContactDialog
+        open={contactOpen}
+        onOpenChange={setContactOpen}
         title="Contact Us"
         description="Tell us about your project and we'll get back to you."
       />
@@ -138,6 +147,7 @@ export default function Home() {
           currentSlide={currentSlide}
           nextSlide={nextSlide}
           prevSlide={prevSlide}
+          setContactOpen={setContactOpen}
         />
 
         {/* Animated background elements */}
