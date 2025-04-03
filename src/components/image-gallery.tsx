@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useImages } from "@/context/ImageContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils"; // Import the cn utility
+import { getCategoryColor, getCategoryLabel } from "@/utils/colorUtils";
 
 export default function ImageGallery() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -114,13 +116,12 @@ export default function ImageGallery() {
                   {/* Category Badge - Always visible */}
                   <div className="absolute top-4 left-4 z-10">
                     <span
-                      className={`
-                        px-3 py-1 rounded-full text-xs font-medium text-white
-                        shadow-lg backdrop-blur-sm
-                        ${categoryColors[image.category] || "bg-gray-500"}
-                      `}
+                      className={cn(
+                        "px-3 py-1 rounded-full text-xs font-medium text-white shadow-lg backdrop-blur-sm",
+                        getCategoryColor(image.category, categoryColors)
+                      )}
                     >
-                      {folderToCategory[image.category] || image.category}
+                      {getCategoryLabel(image.category, folderToCategory)}
                     </span>
                   </div>
 
