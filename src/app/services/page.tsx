@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ContactDialog } from "@/components/contact-dialog";
+import { useContactDialog } from "@/context/ContactDialogContext";
 
 export default function ServicesPage() {
   const services = [
@@ -55,8 +55,8 @@ export default function ServicesPage() {
   ];
 
   const [open, setOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const { openContactDialog } = useContactDialog();
 
   interface Service {
     title: string;
@@ -69,20 +69,8 @@ export default function ServicesPage() {
     setOpen(true);
   };
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
   return (
     <div className="min-h-screen">
-      <ContactDialog
-        timer={30000}
-        open={contactOpen}
-        onOpenChange={setContactOpen}
-        title="Contact Us"
-        description="Tell us about your project and we'll get back to you."
-      />
-
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
@@ -126,7 +114,7 @@ export default function ServicesPage() {
             <p className="text-gray-600 mb-8">
               Contact us today for a free consultation and quote
             </p>
-            <Button size="lg" onClick={() => setContactOpen(true)}>
+            <Button size="lg" onClick={openContactDialog}>
               Get Started
             </Button>
           </div>

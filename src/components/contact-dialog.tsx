@@ -91,14 +91,122 @@ export function ContactDialog({
     setIsSubmitting(true);
 
     try {
-      // Send email to bajrangpainters@gmail.com
+      // Send email to bajrangpainters@gmail.com (Admin notification)
       const adminEmailContent = `
-        <h2>New Contact Request</h2>
-        <p><strong>Name:</strong> ${formData.name}</p>
-        <p><strong>Email:</strong> ${formData.email}</p>
-        <p><strong>Phone:</strong> ${formData.phone}</p>
-        <p><strong>Site Address:</strong> ${formData.address}</p>
-        <p><strong>Message:</strong> ${formData.message}</p>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>New Contact Request</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              max-width: 600px;
+              margin: 0 auto;
+            }
+            .email-container {
+              border: 1px solid #e1e1e1;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            }
+            .email-header {
+              background: #f8fafc;
+              padding: 20px;
+              text-align: center;
+              border-bottom: 1px solid #e1e1e1;
+            }
+            .logo {
+              max-width: 200px;
+              height: auto;
+            }
+            .email-body {
+              padding: 30px;
+              background: white;
+            }
+            .email-footer {
+              background: #f8fafc;
+              padding: 20px;
+              text-align: center;
+              color: #666;
+              font-size: 14px;
+              border-top: 1px solid #e1e1e1;
+            }
+            h2 {
+              color: #0369a1;
+              margin-top: 0;
+            }
+            .info-item {
+              margin-bottom: 15px;
+              padding-bottom: 15px;
+              border-bottom: 1px solid #f0f0f0;
+            }
+            .info-item:last-child {
+              border-bottom: none;
+            }
+            .label {
+              font-weight: bold;
+              color: #555;
+              display: block;
+              margin-bottom: 5px;
+            }
+            .value {
+              padding-left: 10px;
+            }
+            .priority {
+              background-color: #f0f9ff;
+              border-left: 4px solid #0369a1;
+              padding: 10px;
+              margin-bottom: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="email-container">
+            <div class="email-header">
+              <img src="https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/logos/wnmdbthsrv8d71hgjdk9" alt="Bajrang Painters Logo" class="logo">
+            </div>
+            <div class="email-body">
+              <div class="priority">
+                <h2>New Contact Request</h2>
+                <p>A new inquiry has been submitted through your website.</p>
+              </div>
+              
+              <div class="info-item">
+                <span class="label">Name:</span>
+                <div class="value">${formData.name}</div>
+              </div>
+              
+              <div class="info-item">
+                <span class="label">Email:</span>
+                <div class="value">${formData.email}</div>
+              </div>
+              
+              <div class="info-item">
+                <span class="label">Phone:</span>
+                <div class="value">${formData.phone}</div>
+              </div>
+              
+              <div class="info-item">
+                <span class="label">Site Address:</span>
+                <div class="value">${formData.address}</div>
+              </div>
+              
+              <div class="info-item">
+                <span class="label">Message:</span>
+                <div class="value">${formData.message}</div>
+              </div>
+            </div>
+            <div class="email-footer">
+              <p>&copy; ${new Date().getFullYear()} Bajrang Painters. All rights reserved.</p>
+              <p>H-61, SECTOR-12, NOIDA</p>
+            </div>
+          </div>
+        </body>
+        </html>
       `;
 
       // Send notification to the admin
@@ -114,17 +222,139 @@ export function ContactDialog({
 
       // Send confirmation to the user
       const userEmailContent = `
-        <h2>Thank you for contacting Bajrang Painters!</h2>
-        <p>Dear ${formData.name},</p>
-        <p>We have received your inquiry and will get back to you shortly.</p>
-        <p>Here's a summary of the information you provided:</p>
-        <ul>
-          <li><strong>Phone:</strong> ${formData.phone}</li>
-          <li><strong>Site Address:</strong> ${formData.address}</li>
-          <li><strong>Your Message:</strong> ${formData.message}</li>
-        </ul>
-        <p>Best regards,</p>
-        <p>The Bajrang Painters Team</p>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Thank You for Contacting Bajrang Painters</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              max-width: 600px;
+              margin: 0 auto;
+            }
+            .email-container {
+              border: 1px solid #e1e1e1;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            }
+            .email-header {
+              background: #f8fafc;
+              padding: 25px 20px;
+              text-align: center;
+              border-bottom: 1px solid #e1e1e1;
+            }
+            .logo {
+              max-width: 200px;
+              height: auto;
+            }
+            .email-body {
+              padding: 30px;
+              background: white;
+            }
+            .email-footer {
+              background: #f8fafc;
+              padding: 20px;
+              text-align: center;
+              color: #666;
+              font-size: 14px;
+              border-top: 1px solid #e1e1e1;
+            }
+            h2 {
+              color: #0369a1;
+              margin-top: 0;
+            }
+            .thank-you-message {
+              background-color: #f0f9ff;
+              border-left: 4px solid #0369a1;
+              padding: 15px;
+              margin-bottom: 25px;
+            }
+            .info-summary {
+              background-color: #fafafa;
+              border: 1px solid #e1e1e1;
+              border-radius: 6px;
+              padding: 20px;
+              margin-top: 20px;
+            }
+            .info-summary h3 {
+              margin-top: 0;
+              color: #0369a1;
+            }
+            .info-item {
+              margin-bottom: 12px;
+            }
+            .label {
+              font-weight: bold;
+              color: #555;
+            }
+            .contact-info {
+              margin-top: 25px;
+              padding-top: 15px;
+              border-top: 1px solid #e1e1e1;
+            }
+            .social-links {
+              margin-top: 15px;
+            }
+            .social-links a {
+              display: inline-block;
+              margin: 0 10px;
+              color: #0369a1;
+              text-decoration: none;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="email-container">
+            <div class="email-header">
+              <img src="https://res.cloudinary.com/dkaj2dfp9/image/upload/f_auto,q_auto/v1/Bajrang%20Painters/logos/wnmdbthsrv8d71hgjdk9" alt="Bajrang Painters Logo" class="logo">
+            </div>
+            <div class="email-body">
+              <div class="thank-you-message">
+                <h2>Thank You for Contacting Us!</h2>
+                <p>Dear ${formData.name},</p>
+                <p>We have received your inquiry and appreciate your interest in Bajrang Painters. One of our representatives will get back to you shortly.</p>
+              </div>
+              
+              <div class="info-summary">
+                <h3>Your Request Summary</h3>
+                
+                <div class="info-item">
+                  <span class="label">Phone:</span> ${formData.phone}
+                </div>
+                
+                <div class="info-item">
+                  <span class="label">Site Address:</span> ${formData.address}
+                </div>
+                
+                <div class="info-item">
+                  <span class="label">Your Message:</span> ${formData.message}
+                </div>
+              </div>
+              
+              <div class="contact-info">
+                <p>If you need to provide additional information or have any questions, please don't hesitate to contact us:</p>
+                <p><strong>Phone:</strong> +91-9891623038</p>
+                <p><strong>Email:</strong> bajrangpainters@gmail.com</p>
+                <p><strong>Address:</strong> H-61, SECTOR-12, NOIDA</p>
+                
+                <p><strong>Business Hours:</strong><br>
+                Monday - Friday: 9:00 AM - 6:00 PM<br>
+                Saturday: 9:00 AM - 4:00 PM<br>
+                Sunday: Closed</p>
+              </div>
+            </div>
+            <div class="email-footer">
+              <p>Thank you for choosing Bajrang Painters for your painting needs!</p>
+              <p>&copy; ${new Date().getFullYear()} Bajrang Painters. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+        </html>
       `;
 
       await fetch("/api/send-email", {
