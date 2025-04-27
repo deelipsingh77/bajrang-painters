@@ -2,7 +2,7 @@ import { motion, AnimatePresence, useAnimate } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import carouselItems from "@/constants/carousel-images";
-// import { Button } from "./ui/button";
+import { useContactDialog } from "@/context/ContactDialogContext";
 
 // Define types for carousel items
 interface BaseCarouselItem {
@@ -30,15 +30,14 @@ interface FullWidthCarouselProps {
   currentSlide: number;
   nextSlide: () => void;
   prevSlide: () => void;
-  setContactOpen: (open: boolean) => void; // Add this
 }
 
 function FullWidthCarousel({
   currentSlide,
   nextSlide,
   prevSlide,
-  setContactOpen, // Add this
 }: FullWidthCarouselProps) {
+  const { openContactDialog } = useContactDialog();
   const [scope] = useAnimate();
   const constraintsRef = useRef(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -273,7 +272,7 @@ function FullWidthCarousel({
       {/* Add the Get Started button above the dots */}
       <div className="absolute bottom-24 left-0 right-0 z-20 flex justify-center">
         <motion.button
-          onClick={() => setContactOpen(true)}
+          onClick={openContactDialog}
           className="px-8 py-3 bg-primary text-white rounded-full font-semibold shadow-lg hover:bg-primary/90 transition-colors"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -5,39 +5,51 @@ import { Button } from "@/components/ui/button";
 import { BrushIcon, HomeIcon, BuildingIcon, WrenchIcon } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { ContactDialog } from "@/components/contact-dialog";
 
 export default function ServicesPage() {
   const services = [
     {
       title: "Industrial Painting",
-      description: "Specialized painting solutions for factories, warehouses, and industrial facilities with durable finishes.",
+      description:
+        "Specialized painting solutions for factories, warehouses, and industrial facilities with durable finishes.",
       icon: WrenchIcon,
     },
     {
       title: "Commercial Painting",
-      description: "Large-scale painting services for commercial properties, offices, and retail spaces.",
+      description:
+        "Large-scale painting services for commercial properties, offices, and retail spaces.",
       icon: BuildingIcon,
     },
     {
       title: "Apartments Painting",
-      description: "Custom painting services for apartment complexes and multi-family residential buildings.",
+      description:
+        "Custom painting services for apartment complexes and multi-family residential buildings.",
       icon: BuildingIcon,
     },
     {
       title: "Interior Painting",
-      description: "Professional interior painting services for homes and businesses with attention to detail and premium materials.",
+      description:
+        "Professional interior painting services for homes and businesses with attention to detail and premium materials.",
       icon: HomeIcon,
     },
     {
       title: "Exterior Painting",
-      description: "Weather-resistant exterior painting solutions that protect and beautify your property.",
+      description:
+        "Weather-resistant exterior painting solutions that protect and beautify your property.",
       icon: BrushIcon,
     },
     {
       title: "Residential Painting",
-      description: "Complete painting solutions for homes and residential properties with expert color consultation and quality finishes.",
+      description:
+        "Complete painting solutions for homes and residential properties with expert color consultation and quality finishes.",
       icon: HomeIcon,
     },
   ];
@@ -52,7 +64,6 @@ export default function ServicesPage() {
     icon: React.ElementType;
   }
 
-
   const handleCardClick = (service: Service): void => {
     setSelectedService(service);
     setOpen(true);
@@ -62,10 +73,8 @@ export default function ServicesPage() {
   //   setOpen(false);
   // };
 
-
   return (
     <div className="min-h-screen">
-
       <ContactDialog
         timer={30000}
         open={contactOpen}
@@ -78,7 +87,9 @@ export default function ServicesPage() {
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Our Services
+            </h1>
             <p className="text-lg text-gray-600">
               Professional painting services tailored to your needs
             </p>
@@ -109,11 +120,15 @@ export default function ServicesPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Space?</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              Ready to Transform Your Space?
+            </h2>
             <p className="text-gray-600 mb-8">
               Contact us today for a free consultation and quote
             </p>
-            <Button size="lg" onClick={() => setContactOpen(true)}>Get Started</Button>
+            <Button size="lg" onClick={() => setContactOpen(true)}>
+              Get Started
+            </Button>
           </div>
         </div>
       </section>

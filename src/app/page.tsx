@@ -22,7 +22,6 @@ import FeatureCards from "@/components/feature-cards";
 // import ImageGallery from "@/components/image-gallery"; // Add this import
 import Image from "next/image";
 import StandaloneCarousel from "@/components/standalone-carousel";
-import { ContactDialog } from "@/components/contact-dialog";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,7 +29,6 @@ export default function Home() {
   const heroRef = useRef(null);
   const statsRef = useRef(null);
   const featuresRef = useRef(null);
-  // const galleryRef = useRef(null); // Add this ref
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -73,7 +71,6 @@ export default function Home() {
   // Add these state variables
   const [modalImage, setModalImage] = useState<string | null>(null);
   const [modalAlt, setModalAlt] = useState<string>("");
-  const [contactOpen, setContactOpen] = useState(false);
 
   // Add this function to open the modal
   const openImageModal = (src: string, alt: string) => {
@@ -98,14 +95,6 @@ export default function Home() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Add ContactDialog */}
-      <ContactDialog
-        open={contactOpen}
-        onOpenChange={setContactOpen}
-        title="Contact Us"
-        description="Tell us about your project and we'll get back to you."
-      />
-
       {/* Animated background gradient */}
       <motion.div
         className="fixed inset-0 z-0 bg-gradient-to-b from-blue-50 to-white"
@@ -140,7 +129,6 @@ export default function Home() {
           currentSlide={currentSlide}
           nextSlide={nextSlide}
           prevSlide={prevSlide}
-          setContactOpen={setContactOpen}
         />
 
         {/* Animated background elements */}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, useCallback } from "react";
+import { useContactDialog } from "@/context/ContactDialogContext";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,7 @@ export function ContactDialog({
 }: ContactDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { hasBeenShown, setHasBeenShown, isOpen, setIsOpen } = useContactDialog();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -48,19 +50,38 @@ export function ContactDialog({
     message: "",
   });
 
-  const open = externalOpen !== undefined ? externalOpen : internalOpen;
-  const onOpenChange = externalOnOpenChange || setInternalOpen;
+  // Determine the actual open state, prioritizing context over props
+  const open = isOpen || (externalOpen !== undefined ? externalOpen : internalOpen);
+  
+  const onOpenChange = useCallback((value: boolean) => {
+    if (value === true) {
+      setHasBeenShown(true); // Mark as shown when opened
+    }
+
+    // Update all state variables
+    setIsOpen(value);
+    setInternalOpen(value);
+    if (externalOnOpenChange) {
+      externalOnOpenChange(value);
+    }
+  }, [setHasBeenShown, setIsOpen, externalOnOpenChange]);
 
   useEffect(() => {
-    if (timer > 0) {
+    // Only set timer if:
+    // 1. Timer value is greater than 0
+    // 2. Dialog has not been shown before
+    // 3. Dialog is not currently open
+    if (timer > 0 && !hasBeenShown && !isOpen) {
       const timeoutId = setTimeout(() => {
         onOpenChange(true);
       }, timer);
       return () => clearTimeout(timeoutId);
     }
-  }, [timer, onOpenChange]);
+  }, [timer, hasBeenShown, isOpen, onOpenChange]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -122,7 +143,7 @@ export function ContactDialog({
         description: "We'll contact you soon.",
         variant: "default",
       });
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -131,10 +152,9 @@ export function ContactDialog({
         address: "",
         message: "",
       });
-      
+
       // Close dialog after success
       onOpenChange(false);
-      
     } catch (error) {
       console.error("Failed to send email:", error);
       toast({
@@ -158,11 +178,11 @@ export function ContactDialog({
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
               duration: 0.6,
               ease: "easeOut",
               staggerChildren: 0.1,
-              delayChildren: 0.2
+              delayChildren: 0.2,
             }}
             className="space-y-4"
           >
@@ -171,13 +191,13 @@ export function ContactDialog({
               animate={{ opacity: 1, x: 0 }}
               className="space-y-2"
             >
-              <Input 
-                placeholder="Your name" 
-                type="text" 
+              <Input
+                placeholder="Your name"
+                type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                required 
+                required
               />
             </motion.div>
             <motion.div
@@ -185,13 +205,13 @@ export function ContactDialog({
               animate={{ opacity: 1, x: 0 }}
               className="space-y-2"
             >
-              <Input 
-                placeholder="Email" 
-                type="email" 
+              <Input
+                placeholder="Email"
+                type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required 
+                required
               />
             </motion.div>
             <motion.div
@@ -199,13 +219,13 @@ export function ContactDialog({
               animate={{ opacity: 1, x: 0 }}
               className="space-y-2"
             >
-              <Input 
-                placeholder="Phone number" 
-                type="tel" 
+              <Input
+                placeholder="Phone number"
+                type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                required 
+                required
               />
             </motion.div>
             <motion.div
@@ -213,13 +233,13 @@ export function ContactDialog({
               animate={{ opacity: 1, x: 0 }}
               className="space-y-2"
             >
-              <Input 
-                placeholder="Site address" 
-                type="text" 
+              <Input
+                placeholder="Site address"
+                type="text"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                required 
+                required
               />
             </motion.div>
             <motion.div
@@ -227,9 +247,9 @@ export function ContactDialog({
               animate={{ opacity: 1, x: 0 }}
               className="space-y-2"
             >
-              <Textarea 
-                placeholder="Your message" 
-                className="min-h-[100px]" 
+              <Textarea
+                placeholder="Your message"
+                className="min-h-[100px]"
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
@@ -240,11 +260,7 @@ export function ContactDialog({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={isSubmitting}
-              >
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
