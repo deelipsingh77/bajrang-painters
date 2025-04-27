@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { ImageProvider } from "@/context/ImageContext";
 import { ContactDialog } from "@/components/contact-dialog";
 import { Analytics } from '@vercel/analytics/next';
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
               {children}
               <Analytics />
             </main>
+            <Toaster />
             <SiteFooter className="relative z-50" />
           </div>
         </ImageProvider>
