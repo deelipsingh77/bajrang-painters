@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { ImageProvider } from "@/context/ImageContext";
+import { ContactDialog } from "@/components/contact-dialog";
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +24,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <ImageProvider>
           <div className="relative min-h-screen flex flex-col">
+            <ContactDialog timer={30000} />
             <SiteHeader />
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow">
+              {children}
+              <Analytics />
+            </main>
             <SiteFooter className="relative z-50" />
           </div>
         </ImageProvider>
