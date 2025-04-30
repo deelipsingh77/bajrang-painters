@@ -182,12 +182,12 @@ export function ContactDialog({
               
               <div class="info-item">
                 <span class="label">Email:</span>
-                <div class="value">${formData.email}</div>
+                <div class="value"><a href="mailto:${formData.email}">${formData.email}</a></div>
               </div>
               
               <div class="info-item">
                 <span class="label">Phone:</span>
-                <div class="value">${formData.phone}</div>
+                <div class="value"><a href="tel:${formData.phone}">${formData.phone}</a></div>
               </div>
               
               <div class="info-item">
@@ -324,7 +324,7 @@ export function ContactDialog({
                 <h3>Your Request Summary</h3>
                 
                 <div class="info-item">
-                  <span class="label">Phone:</span> ${formData.phone}
+                  <span class="label">Phone:</span> <a href="tel:${formData.phone}">${formData.phone}</a>
                 </div>
                 
                 <div class="info-item">
@@ -338,8 +338,8 @@ export function ContactDialog({
               
               <div class="contact-info">
                 <p>If you need to provide additional information or have any questions, please don't hesitate to contact us:</p>
-                <p><strong>Phone:</strong> +91-9891623038</p>
-                <p><strong>Email:</strong> bajrangpainters@gmail.com</p>
+                <p><strong>Phone:</strong> <a href="tel:+919891623038">+91-9891623038</a></p>
+                <p><strong>Email:</strong> <a href="mailto:bajrangpainters@gmail.com">bajrangpainters@gmail.com</a></p>
                 <p><strong>Address:</strong> H-61, SECTOR-12, NOIDA</p>
                 
                 <p><strong>Business Hours:</strong><br>
