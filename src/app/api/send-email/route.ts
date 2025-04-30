@@ -18,9 +18,8 @@ export async function POST(req: Request) {
 
   try {
     await transporter.sendMail({
-      from: `deelipsingh77@gmail.com`,
+      from: process.env.BREVO_SMTP_HOST_EMAIL,
       to,
-      cc: "deelipsingh77@gmail.com",
       subject,
       html: message,
     });
