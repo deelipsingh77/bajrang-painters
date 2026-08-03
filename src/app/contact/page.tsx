@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "@/constants/contact-info";
 
 interface FormData {
   name: string;
@@ -45,7 +46,7 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     try {
-      // Send email to bajrangpainters@gmail.com (Admin notification)
+      // Send email to CONTACT_EMAIL (Admin notification)
       const adminEmailContent = `
         <!DOCTYPE html>
         <html lang="en">
@@ -168,7 +169,7 @@ export default function ContactPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: "contact@bajrangpainters.com",
+          to: CONTACT_EMAIL,
           subject: "New Contact Form Submission",
           message: adminEmailContent,
         }),
@@ -292,8 +293,8 @@ export default function ContactPage() {
               
               <div class="contact-info">
                 <p>If you need to provide additional information or have any questions, please don't hesitate to contact us:</p>
-                <p><strong>Phone:</strong> +91-9891623038</p>
-                <p><strong>Email:</strong> bajrangpainters@gmail.com</p>
+                <p><strong>Phone:</strong> ${CONTACT_PHONE}</p>
+                <p><strong>Email:</strong> ${CONTACT_EMAIL}</p>
                 <p><strong>Address:</strong> H-61, SECTOR-12, NOIDA</p>
                 
                 <p><strong>Business Hours:</strong><br>
@@ -539,7 +540,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800">Phone</h3>
-                      <p className="text-gray-600 mt-1">+91-9891623038</p>
+                      <p className="text-gray-600 mt-1">{CONTACT_PHONE}</p>
                     </div>
                   </motion.div>
 
@@ -553,7 +554,7 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-800">Email</h3>
                       <p className="text-gray-600 mt-1">
-                        bajrangpainters@gmail.com
+                        {CONTACT_EMAIL}
                       </p>
                     </div>
                   </motion.div>

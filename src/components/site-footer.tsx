@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { PhoneIcon, MailIcon, MapPinIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "@/constants/contact-info";
 
 interface SiteFooterProps {
   className?: string;
@@ -74,11 +75,11 @@ export function SiteFooter({ className }: SiteFooterProps) {
               </li>
               <li className="flex items-center space-x-3">
                 <PhoneIcon className="h-5 w-5" />
-                <span>+91-9891623038</span>
+                <span>{CONTACT_PHONE}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <MailIcon className="h-5 w-5" />
-                <span>bajarangpainters@gmail.com</span>
+                <span>{CONTACT_EMAIL}</span>
               </li>
             </ul>
           </div>

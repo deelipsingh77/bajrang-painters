@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   try {
     await transporter.sendMail({
-      from: SENDER_EMAIL,
+      from: `"Bajrang Painters" <${SENDER_EMAIL}>`,
       to,
       subject,
       html: message,

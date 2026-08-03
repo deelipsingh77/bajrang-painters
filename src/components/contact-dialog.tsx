@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_TEL } from "@/constants/contact-info";
 
 interface ContactDialogProps {
   open?: boolean;
@@ -91,7 +92,7 @@ export function ContactDialog({
     setIsSubmitting(true);
 
     try {
-      // Send email to bajrangpainters@gmail.com (Admin notification)
+      // Send email to CONTACT_EMAIL (Admin notification)
       const adminEmailContent = `
         <!DOCTYPE html>
         <html lang="en">
@@ -214,7 +215,7 @@ export function ContactDialog({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: "contact@bajrangpainters.com",
+          to: CONTACT_EMAIL,
           subject: "New Contact Form Submission",
           message: adminEmailContent,
         }),
@@ -338,8 +339,8 @@ export function ContactDialog({
               
               <div class="contact-info">
                 <p>If you need to provide additional information or have any questions, please don't hesitate to contact us:</p>
-                <p><strong>Phone:</strong> <a href="tel:+919891623038">+91-9891623038</a></p>
-                <p><strong>Email:</strong> <a href="mailto:bajrangpainters@gmail.com">bajrangpainters@gmail.com</a></p>
+                <p><strong>Phone:</strong> <a href="tel:${CONTACT_PHONE_TEL}">${CONTACT_PHONE}</a></p>
+                <p><strong>Email:</strong> <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></p>
                 <p><strong>Address:</strong> H-61, SECTOR-12, NOIDA</p>
                 
                 <p><strong>Business Hours:</strong><br>
