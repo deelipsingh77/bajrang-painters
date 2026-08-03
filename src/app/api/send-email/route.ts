@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 
+const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || "contact@bajrangpainters.com";
+
 export async function POST(req: Request) {
   const { to, subject, message } = await req.json();
 
@@ -18,9 +20,8 @@ export async function POST(req: Request) {
 
   try {
     await transporter.sendMail({
-      from: `deelipsingh77@gmail.com`,
+      from: SENDER_EMAIL,
       to,
-      cc: "deelipsingh77@gmail.com",
       subject,
       html: message,
     });

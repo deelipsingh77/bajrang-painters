@@ -214,7 +214,7 @@ export function ContactDialog({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: "bajrangpainters@gmail.com",
+          to: "contact@bajrangpainters.com",
           subject: "New Contact Form Submission",
           message: adminEmailContent,
         }),
